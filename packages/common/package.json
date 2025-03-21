@@ -1,0 +1,86 @@
+{
+  "name": "@create-figma-plugin/common",
+  "version": "4.0.0-alpha.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Internal utilities for the Create Figma Plugin toolkit",
+  "keywords": [
+    "create-figma-plugin",
+    "figjam",
+    "figma",
+    "figma-plugin",
+    "figma-plugins"
+  ],
+  "license": "MIT",
+  "author": "Yuan Qing Lim",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/yuanqing/create-figma-plugin.git",
+    "directory": "packages/common"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "lib"
+  ],
+  "exports": "./lib/index.js",
+  "main": "./lib/index.js",
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "npm run build:generate-index && npm run build:js",
+    "build:js": "tsc --build",
+    "build:generate-index": "rimraf src/index.ts && tsx ../../scripts/generate-index.ts -- 'src/**/*.ts' '!src/**/private/**/*' && eslint --fix src/index.ts",
+    "clean": "rimraf --glob '*.log' lib tsconfig.tsbuildinfo",
+    "fix": "concurrently npm:fix:js npm:fix:json",
+    "fix:js": "eslint --fix '{src,test}/**/*.ts' --ignore-pattern src/index.ts",
+    "fix:json": "prettier --log-level error --write '*.json' 'test/**/fixtures/**/*.json'",
+    "lint": "eslint '{src,test}/**/*.ts' --ignore-pattern src/index.ts",
+    "test": "ava --serial 'test/**/*.ts'"
+  },
+  "dependencies": {
+    "@sindresorhus/slugify": "^2.2.1",
+    "kleur": "^4.1.5",
+    "path-exists": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.2.0",
+    "@typescript-eslint/eslint-plugin": "6.13.2",
+    "ava": "6.1.3",
+    "concurrently": "8.2.2",
+    "eslint": "8.55.0",
+    "eslint-config-yuanqing": "0.0.9",
+    "eslint-plugin-import": "2.29.0",
+    "eslint-plugin-prettier": "5.0.1",
+    "eslint-plugin-react": "7.33.2",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "eslint-plugin-simple-import-sort": "10.0.0",
+    "eslint-plugin-sort-keys-fix": "1.1.2",
+    "prettier": "3.1.0",
+    "rimraf": "6.0.1",
+    "tsx": "4.17.0",
+    "typescript": "5.4.5"
+  },
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "failFast": true,
+    "nodeArguments": [
+      "--import",
+      "tsx"
+    ],
+    "timeout": "2m",
+    "workerThreads": false
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-yuanqing",
+    "root": true,
+    "env": {
+      "node": true
+    }
+  },
+  "prettier": "eslint-config-yuanqing/prettier"
+}
